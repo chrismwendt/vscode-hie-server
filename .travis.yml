@@ -1,13 +1,13 @@
 language: node_js
 
 node_js:
-- 8
+  - 8
 
 sudo: false
 
 cache:
   directories:
-    - "node_modules"
+    - 'node_modules'
 
 os:
   - osx
@@ -17,21 +17,21 @@ os:
 # https://code.visualstudio.com/docs/extensions/testing-extensions#_running-tests-automatically-on-travis-ci-build-machines
 before_install:
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-      sh -e /etc/init.d/xvfb start;
-      sleep 3;
+    export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+    sh -e /etc/init.d/xvfb start;
+    sleep 3;
     fi
 
 install:
-- npm install
-- npm run vscode:prepublish
+  - npm install
+  - npm run vscode:prepublish
 
 script:
-- npm test --silent
+  - npm test
 
 before_deploy:
-- npm install -g vsce
-- vsce package
+  - npm install -g vsce
+  - vsce package
 
 # Deploy the extension to the Marketplace and GitHub releases (only on tags).
 # Note that this only deploys from the master branch, but will still allow
@@ -44,14 +44,14 @@ before_deploy:
 #      b) Set a environment variable `VS_TOKEN` with the value of your VS Code personal token
 #      c) Make sure `Display value in build log` is turned OFF!
 deploy:
-- provider: script # Deploy to VS Code Market Place (only on tags!).
-  script: vsce publish -p $VS_CODE
-  skip_cleanup: true
-  on: # Publish on all builds on master branch.
-    repo: alanz/vscode-hie-server
-    branch: master
-    tags: true
-    condition: $TRAVIS_OS_NAME = linux
+  - provider: script # Deploy to VS Code Market Place (only on tags!).
+    script: vsce publish -p $VS_CODE
+    skip_cleanup: true
+    on: # Publish on all builds on master branch.
+      repo: alanz/vscode-hie-server
+      branch: master
+      tags: true
+      condition: $TRAVIS_OS_NAME = linux
 # - provider: releases # Deploy the *.vsix pcakge to GitHub releases.
 #   file_glob: true
 #   file: "*.vsix"
